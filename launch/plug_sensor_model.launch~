@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+        <arg name="listen_topic"	value="tf_sensor/netft_data"/>
+	<arg name="publish_topic" 	value="plug_sensor_features"/>
+	<node name="plug_sensor_model" pkg="plug_sensor_models" type="plug_sensor_node" args="-listen_topic $(arg listen_topic) -publish_topic $(arg publish_topic) -rate 100" output="screen"/>
+
+</launch>
