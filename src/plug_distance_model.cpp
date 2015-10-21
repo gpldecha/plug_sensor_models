@@ -5,7 +5,7 @@ namespace psm{
 Plug_distance_model::Plug_distance_model(wobj::WrapObject &wrap_object):
     wrap_object(wrap_object)
 {
-    std::string  config_file = "/home/guillaume/roscode/catkin_ws/src/objects/meshes/plug/config/X.txt";
+    std::string  config_file = "/home/guillaume/roscode/catkin_ws/src/models_project/objects/meshes/plug/config/X.txt";
     if(!model_TF.load(config_file)){
         std::cerr<< "Plug_sensor::Plug_sensor failed to load file: " + config_file << std::endl;
     }
@@ -60,7 +60,7 @@ void Plug_distance_model::visualise(){
 ///
 Plug_contact_model::Plug_contact_model(wobj::WrapObject &wrap_object):
 wrap_object(wrap_object){
-    std::string  config_file = "/home/guillaume/roscode/catkin_ws/src/objects/meshes/plug/config/X.txt";
+    std::string  config_file = "/home/guillaume/roscode/catkin_ws/src/models_project/objects/meshes/plug/config/X.txt";
     if(!model_TF.load(config_file)){
         std::cerr<< "Plug_sensor::Plug_sensor failed to load file: " + config_file << std::endl;
     }

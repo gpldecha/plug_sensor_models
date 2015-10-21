@@ -68,7 +68,7 @@ void Three_pin_distance_model::initialise_vision(ros::NodeHandle& node){
     ptr_vis_vectors = std::shared_ptr<opti_rviz::Vis_vectors>( new opti_rviz::Vis_vectors(node,"three_pin_model"));
     ptr_vis_vectors->scale = 0.002;
     ptr_vis_vectors->set_color(colors);
-    ptr_vis_vectors->initialise("world",dir_vectors);
+    ptr_vis_vectors->initialise("world_frame",dir_vectors);
 
 }
 
