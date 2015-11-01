@@ -1,4 +1,4 @@
-#include <plug_sensor_models/force_iid_model.h>
+#include "peg_sensor/classifier/force_iid_model.h"
 
 namespace psm {
 
@@ -30,7 +30,7 @@ type(type){
 
 }
 
-void Force_iid_model::update(arma::colvec &Y, const arma::fcolvec3& force){
+void Force_iid_model::update(arma::colvec& Y,const arma::fcolvec3& force, const arma::fcolvec3& torque){
 
     features(contact) = gaussian_step_function_positive(arma::norm(force),0.9,1,beta);
 
@@ -78,28 +78,6 @@ void Force_iid_model::print() const{
     }
 }
 
-Plug_sensor_publisher::Plug_sensor_publisher(ros::NodeHandle& node, const std::string& topic_name, std::size_t length)
-{
-    publisher = node.advertise<std_msgs::Float32MultiArray>(topic_name,10);
-    feature_msg.data.resize(length);
-
-}
-
-void Plug_sensor_publisher::publish(const arma::fcolvec2 &features){
-    feature_msg.data[0] = features(0);
-    feature_msg.data[1] = features(1);
-    publisher.publish(feature_msg);
-}
-
-void Plug_sensor_publisher::publish(const arma::fcolvec6 &features){
-    feature_msg.data[0] = features(contact);
-    feature_msg.data[1] = features(up);
-    feature_msg.data[2] = features(down);
-    feature_msg.data[3] = features(left);
-    feature_msg.data[4] = features(right);
-    feature_msg.data[5] = features(push);
-    publisher.publish(feature_msg);
-}
 
 
 

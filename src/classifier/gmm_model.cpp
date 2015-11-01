@@ -1,4 +1,5 @@
-#include <plug_sensor_models/gmm_model.h>
+#include "peg_sensor/classifier/gmm_model.h"
+
 namespace psm {
 
 GMM_model::GMM_model(const std::string &name):

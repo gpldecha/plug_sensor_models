@@ -1,4 +1,4 @@
-#include <plug_sensor_manager/sensor_manager.h>
+#include "peg_sensor_manager/sensor_manager.h"
 
 
 namespace psm{
@@ -42,7 +42,12 @@ void Sensor_manager::initialise(type_sensor t_sensor){
     }
 }
 
-void Sensor_manager::update(arma::colvec& Y, const arma::colvec3& pos, const arma::mat33& Rot, const arma::fcolvec& force){
+void Sensor_manager::update(arma::colvec& Y,
+                            const arma::colvec3& pos,
+                            const arma::mat33& Rot,
+                            const arma::fcolvec3& force,
+                            const arma::fcolvec3& torque)
+{
     switch(t_sensor){
 
     case FOUR_CONTACT_DIST:
@@ -62,7 +67,7 @@ void Sensor_manager::update(arma::colvec& Y, const arma::colvec3& pos, const arm
     }
     case FORCE_IID:
     {
-        ptr_sensor_force_idd->update(Y,force);
+      //  ptr_sensor_force_idd->update(Y,force);
         break;
     }
     }

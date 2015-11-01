@@ -1,14 +1,14 @@
 #ifndef DISTANCE_MODEL_H_
 #define DISTANCE_MODEL_H_
 
-#include <plug_sensor_models/plug_distance_model.h>
-#include <wrapobject/wrapobject.h>
+#include "peg_sensor/peg_sensor_model/peg_distance_model.h"
+#include "wrapobject.h"
 #include <visualise/vis_vector.h>
 
 namespace psm{
 
 
-class Three_pin_distance_model : public Plug_distance_model{
+class Three_pin_distance_model : public Peg_distance_model{
 public:
 
     Three_pin_distance_model(wobj::WrapObject& wrap_object);
@@ -33,7 +33,7 @@ private:
 };
 
 
-class Contact_distance_model : public Plug_distance_model{
+class Contact_distance_model : public Peg_distance_model{
 
 public:
 
@@ -87,6 +87,7 @@ protected:
 
     arma::fcolvec3                      closet_point_proj_edge;
     arma::fcolvec3                      closet_model_edge;
+    //boo                          inside;
 
 
 };

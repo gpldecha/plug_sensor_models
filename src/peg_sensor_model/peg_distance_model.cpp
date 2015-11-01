@@ -1,11 +1,11 @@
-#include <plug_sensor_models/plug_distance_model.h>
+#include "peg_sensor/peg_sensor_model/peg_distance_model.h"
 
 namespace psm{
 
-Plug_distance_model::Plug_distance_model(wobj::WrapObject &wrap_object):
+Peg_distance_model::Peg_distance_model(wobj::WrapObject &wrap_object):
     wrap_object(wrap_object)
 {
-    std::string  config_file = "/home/guillaume/roscode/catkin_ws/src/models_project/objects/meshes/plug/config/X.txt";
+    std::string  config_file = "/home/guillaume/roscode/catkin_ws/src/wrapper/models_project/objects/meshes/plug/config/X.txt";
     if(!model_TF.load(config_file)){
         std::cerr<< "Plug_sensor::Plug_sensor failed to load file: " + config_file << std::endl;
     }
@@ -16,7 +16,7 @@ Plug_distance_model::Plug_distance_model(wobj::WrapObject &wrap_object):
     b_visualise = false;
 }
 
-void Plug_distance_model::update_model(const arma::colvec3& T, const arma::mat33& R){
+void Peg_distance_model::update_model(const arma::colvec3& T, const arma::mat33& R){
 
    // R.print("update_model R");
 
@@ -30,11 +30,11 @@ void Plug_distance_model::update_model(const arma::colvec3& T, const arma::mat33
 }
 
 
-void Plug_distance_model::print(const arma::colvec& Y) const{
+void Peg_distance_model::print(const arma::colvec& Y) const{
     Y.print("Y");
 }
 
-void Plug_distance_model::initialise_vision(ros::NodeHandle& node){
+void Peg_distance_model::initialise_vision(ros::NodeHandle& node){
     ptr_vis_points = std::shared_ptr<opti_rviz::Vis_points>(new opti_rviz::Vis_points(node,"plug_model"));
     ptr_vis_points->scale = 0.005;
     ptr_vis_points->r = 1;
@@ -43,7 +43,7 @@ void Plug_distance_model::initialise_vision(ros::NodeHandle& node){
     b_visualise       = true;
 }
 
-void Plug_distance_model::visualise(){
+void Peg_distance_model::visualise(){
     if(b_visualise){
         if(ptr_vis_points != NULL){
             ptr_vis_points->update(model_points);
@@ -60,7 +60,7 @@ void Plug_distance_model::visualise(){
 ///
 Plug_contact_model::Plug_contact_model(wobj::WrapObject &wrap_object):
 wrap_object(wrap_object){
-    std::string  config_file = "/home/guillaume/roscode/catkin_ws/src/models_project/objects/meshes/plug/config/X.txt";
+    std::string  config_file = "/home/guillaume/roscode/catkin_ws/src/wrapper/models_project/objects/meshes/plug/config/X.txt";
     if(!model_TF.load(config_file)){
         std::cerr<< "Plug_sensor::Plug_sensor failed to load file: " + config_file << std::endl;
     }

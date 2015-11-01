@@ -1,19 +1,23 @@
-#ifndef PLUG_DISTANCE_MODEL_H_
-#define PLUG_DISTANCE_MODEL_H_
+#ifndef PEG_SENSOR_DISTANCE_MODEL_H_
+#define PEG_SENSOR_DISTANCE_MODEL_H_
+
+#include <ros/ros.h>
+#include <visualise/vis_points.h>
+
+#include "wrapobject.h"
+#include "peg_sensor/peg_sensor_model/distance_features.h"
+
 
 #include <armadillo>
-#include <wrapobject/wrapobject.h>
-#include <plug_sensor_models/distance_features.h>
-#include <visualise/vis_points.h>
-#include <ros/ros.h>
+
 
 namespace psm{
 
-class Plug_distance_model{
+class Peg_distance_model{
 
 public:
 
-    Plug_distance_model(wobj::WrapObject &wrap_object);
+    Peg_distance_model(wobj::WrapObject &wrap_object);
 
     virtual void update(arma::colvec& Y,const arma::colvec3& pos,const arma::mat33& Rot) = 0;
 

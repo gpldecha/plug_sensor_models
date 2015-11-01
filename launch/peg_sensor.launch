@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+
+
+	<arg name="y_topic" 	        value="peg_sensor_classifier"/>
+	<arg name="ft_topic"		value="tf_sensor/netft_data"/>
+ 	<arg name="fixed_frame" 	value="/world_frame"/>
+	<arg name="path_sensor_model"   value="$(find objects)/meshes/plug/config/X.txt"/>
+	<arg name="peg_link_name"       value="peg_link"/>
+
+
+	
+
+	<node name="peg_classifier" pkg="peg_sensor" type="peg_sensor_classifier_node" args="-y_topic $(arg y_topic) -ft_topic $(arg ft_topic) -fixed_frame $(arg fixed_frame) -path_sensor_model $(arg path_sensor_model) -peg_link_name $(arg peg_link_name) -rate 100" output="screen"/>
+
+
+
+
+
+
+</launch>
+

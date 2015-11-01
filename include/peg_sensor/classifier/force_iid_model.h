@@ -1,10 +1,11 @@
-#ifndef FORCE_IID_MODEL_H_
-#define FORCE_IID_MODEL_H_
+#ifndef PEG_FORCE_IID_MODEL_H_
+#define PEG_FORCE_IID_MODEL_H_
 
+#include "peg_sensor/classifier/base_peg_classifier.h"
+
+#include <ros/ros.h>
 #include <armadillo>
 #include <map>
-#include <ros/ros.h>
-#include <std_msgs/Float32MultiArray.h>
 
 namespace psm{
 
@@ -12,7 +13,8 @@ typedef enum {SIMPLE,FULL} vector_type;
 typedef enum {contact=0,up=1,down=2,left=3,right=4,push=5} feature_type;
 
 
-class Force_iid_model{
+
+class Force_iid_model : public Base_peg_classifier {
 
 public:
 
@@ -27,7 +29,7 @@ public:
 
     Force_iid_model(vector_type type = FULL);
 
-    void update(arma::colvec& Y,const arma::fcolvec3& force);
+     virtual void update(arma::colvec& Y,const arma::fcolvec3& force, const arma::fcolvec3& torque);
 
     void print() const;
 
@@ -79,24 +81,7 @@ private:
 
 };
 
-class Plug_sensor_publisher{
 
-public:
-
-    Plug_sensor_publisher(ros::NodeHandle& node,const std::string& topic_name,std::size_t length);
-
-    void publish(const arma::fcolvec2& features);
-
-    void publish(const arma::fcolvec6 &features);
-
-private:
-
-    std_msgs::Float32MultiArray feature_msg;
-    ros::Publisher              publisher;
-    vector_type                 v_type;
-
-
-};
 
 }
 

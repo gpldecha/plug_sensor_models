@@ -1,4 +1,4 @@
-#include <plug_sensor_models/distance_features.h>
+#include "peg_sensor/peg_sensor_model/distance_features.h"
 
 #include <optitrack_rviz/type_conversion.h>
 

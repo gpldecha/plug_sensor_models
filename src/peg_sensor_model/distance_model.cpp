@@ -1,11 +1,11 @@
-#include <plug_sensor_models/distance_model.h>
+#include "peg_sensor/peg_sensor_model/distance_model.h"
 #include <optitrack_rviz/type_conversion.h>
 
 namespace psm {
 
 
 Three_pin_distance_model::Three_pin_distance_model(wobj::WrapObject &wrap_object):
-    Plug_distance_model(wrap_object),distance_features(wrap_object){
+    Peg_distance_model(wrap_object),distance_features(wrap_object){
 
     dir_vectors.resize(6);
     colors.resize(6);
@@ -22,49 +22,49 @@ Three_pin_distance_model::Three_pin_distance_model(wobj::WrapObject &wrap_object
 void Three_pin_distance_model::update(arma::colvec &Y,const arma::colvec3& pos,const arma::mat33& Rot){
 
 
-   update_model(pos,Rot);
+    update_model(pos,Rot);
 
 
-   Y.resize(3 * 2 * 3);
-   std::size_t index = 0;
+    Y.resize(3 * 2 * 3);
+    std::size_t index = 0;
 
     for(std::size_t i = 0; i < 3;i++)
     {
-         distance_features.compute_surface_edge_vector(model_points.row(i).st());
+        distance_features.compute_surface_edge_vector(model_points.row(i).st());
 
-         Y(6*i+0) = distance_features.point_surface(0) -  model_points(i,0);
-         Y(6*i+1) = distance_features.point_surface(1) -  model_points(i,1);
-         Y(6*i+2) = distance_features.point_surface(2) -  model_points(i,2);
+        Y(6*i+0) = distance_features.point_surface(0) -  model_points(i,0);
+        Y(6*i+1) = distance_features.point_surface(1) -  model_points(i,1);
+        Y(6*i+2) = distance_features.point_surface(2) -  model_points(i,2);
 
-         Y(6*i+3) = distance_features.point_edge(0) -  model_points(i,0);
-         Y(6*i+4) = distance_features.point_edge(1) -  model_points(i,1 );
-         Y(6*i+5) = distance_features.point_edge(2) -  model_points(i,2);
+        Y(6*i+3) = distance_features.point_edge(0) -  model_points(i,0);
+        Y(6*i+4) = distance_features.point_edge(1) -  model_points(i,1 );
+        Y(6*i+5) = distance_features.point_edge(2) -  model_points(i,2);
 
-         if(b_visualise){
+        if(b_visualise){
 
-             dir_vectors[index].origin.setX(model_points(i,0));
-             dir_vectors[index].origin.setY(model_points(i,1));
-             dir_vectors[index].origin.setZ(model_points(i,2));
+            dir_vectors[index].origin.setX(model_points(i,0));
+            dir_vectors[index].origin.setY(model_points(i,1));
+            dir_vectors[index].origin.setZ(model_points(i,2));
 
-             dir_vectors[index].direction.setX(Y(6*i+0));
-             dir_vectors[index].direction.setY(Y(6*i+1));
-             dir_vectors[index].direction.setZ(Y(6*i+2));
+            dir_vectors[index].direction.setX(Y(6*i+0));
+            dir_vectors[index].direction.setY(Y(6*i+1));
+            dir_vectors[index].direction.setZ(Y(6*i+2));
 
-             dir_vectors[index+1].origin.setX(model_points(i,0));
-             dir_vectors[index+1].origin.setY(model_points(i,1));
-             dir_vectors[index+1].origin.setZ(model_points(i,2));
+            dir_vectors[index+1].origin.setX(model_points(i,0));
+            dir_vectors[index+1].origin.setY(model_points(i,1));
+            dir_vectors[index+1].origin.setZ(model_points(i,2));
 
-             dir_vectors[index+1].direction.setX(Y(6*i+3));
-             dir_vectors[index+1].direction.setY(Y(6*i+4));
-             dir_vectors[index+1].direction.setZ(Y(6*i+5));
-             index = index + 2;
-         }
+            dir_vectors[index+1].direction.setX(Y(6*i+3));
+            dir_vectors[index+1].direction.setY(Y(6*i+4));
+            dir_vectors[index+1].direction.setZ(Y(6*i+5));
+            index = index + 2;
+        }
     }
 
 }
 
 void Three_pin_distance_model::initialise_vision(ros::NodeHandle& node){
-    Plug_distance_model::initialise_vision(node);
+    Peg_distance_model::initialise_vision(node);
     ptr_vis_vectors = std::shared_ptr<opti_rviz::Vis_vectors>( new opti_rviz::Vis_vectors(node,"three_pin_model"));
     ptr_vis_vectors->scale = 0.002;
     ptr_vis_vectors->set_color(colors);
@@ -74,7 +74,7 @@ void Three_pin_distance_model::initialise_vision(ros::NodeHandle& node){
 
 void Three_pin_distance_model::visualise(){
     if(b_visualise){
-        Plug_distance_model::visualise();
+        Peg_distance_model::visualise();
         if(ptr_vis_vectors != NULL){
             ptr_vis_vectors->update(dir_vectors);
             ptr_vis_vectors->publish();
@@ -85,7 +85,7 @@ void Three_pin_distance_model::visualise(){
 
 
 Contact_distance_model::Contact_distance_model(wobj::WrapObject& wrap_object)
-  :Plug_distance_model(wrap_object),distance_features(wrap_object)
+    :Peg_distance_model(wrap_object),distance_features(wrap_object)
 {
 
     dir_vectors.resize(2);
@@ -101,54 +101,25 @@ Contact_distance_model::Contact_distance_model(wobj::WrapObject& wrap_object)
 }
 
 void Contact_distance_model::update(arma::colvec &Y,const arma::colvec3& pos,const arma::mat33& Rot){
-    Plug_distance_model::update_model(pos,Rot);
+    Peg_distance_model::update_model(pos,Rot);
     Y.resize(2);
 
     get_distances();
 
-
-
-
-
-   // if(distance_features.bIsInside){
-   //        Y(C_SURF) = -1;
-   //        Y(C_EDGE) = -1;
-   // }else{
-       // Y(C_SURF) = exp(min_half_one_div_var *  min_distance_surface);
-       // Y(C_EDGE) = exp(min_half_one_div_var *  min_distance_edge);
-
-        if(min_distance_surface < 0.02){
-            Y(C_SURF) = min_distance_surface;
-        }else{
-            Y(C_SURF) = 0;
-        }
-        if(min_distance_edge < 0.02){
-            Y(C_EDGE) = min_distance_edge;
-        }else{
-            Y(C_EDGE) = 0;
-        }
- // }
-
-    // this is a particle
-   /* if(!b_visualise){
-        if(pos(1) < -0.5){
-            Y.print("Y particle");
-
-        }
-    }*/
-
-
-
-
-   /* Y(C_SURF) =  exp(min_half_one_div_var * min_distance_surface );
-    Y(C_EDGE) =  exp(min_half_one_div_var * min_distance_edge    );
-
-    if(Y(C_SURF) < 0.0001){
+    if(min_distance_surface < 0.02){
+        Y(C_SURF) = min_distance_surface;
+    }else{
         Y(C_SURF) = 0;
     }
-
-    if(Y(C_EDGE) < 0.0001){
+    if(min_distance_edge < 0.02){
+        Y(C_EDGE) = min_distance_edge;
+    }else{
         Y(C_EDGE) = 0;
+    }
+
+    /*if(min_distance_surface < 0.05 && distance_features.bIsInside){
+        Y(C_SURF) = -1;
+        Y(C_EDGE) = -1;
     }*/
 
 }
@@ -162,26 +133,26 @@ void Contact_distance_model::get_distances(){
 
     for(std::size_t i = 0; i < 3;i++)
     {
-         distance_features.compute_surface_edge_vector(model_points.row(i).st());
+        distance_features.compute_surface_edge_vector(model_points.row(i).st());
 
-         direction_surf = distance_features.point_surface - model_points.row(i).st();
-         current_distance_surface = arma::norm(direction_surf);
+        direction_surf = distance_features.point_surface - model_points.row(i).st();
+        current_distance_surface = arma::norm(direction_surf);
 
-         direction_edge = distance_features.point_edge - model_points.row(i).st();
-         current_distance_edge = arma::norm(direction_edge);
+        direction_edge = distance_features.point_edge - model_points.row(i).st();
+        current_distance_edge = arma::norm(direction_edge);
 
-         if(current_distance_surface < min_distance_surface){
-             min_distance_surface  =current_distance_surface;
-             index_closet_point_s  = i;
-             proj_points.row(0) = distance_features.point_surface.st();
-         }
+        if(current_distance_surface < min_distance_surface){
+            min_distance_surface  =current_distance_surface;
+            index_closet_point_s  = i;
+            proj_points.row(0) = distance_features.point_surface.st();
+        }
 
-         if(current_distance_edge < min_distance_edge){
-             min_distance_edge      =   current_distance_edge;
-             index_closet_point_e   =   i;
-             proj_points.row(1) = distance_features.point_edge.st();
+        if(current_distance_edge < min_distance_edge){
+            min_distance_edge      =   current_distance_edge;
+            index_closet_point_e   =   i;
+            proj_points.row(1) = distance_features.point_edge.st();
 
-         }
+        }
     }
     direction_surf = proj_points.row(0).st() - model_points.row(index_closet_point_s).st();
     direction_edge = proj_points.row(1).st() - model_points.row(index_closet_point_e).st();
@@ -212,8 +183,8 @@ void Contact_distance_model::get_distance_features(const arma::colvec3& model_ce
     tmp(1) = model_center(1);
     tmp(2) = model_center(2);*/
 
-    // get closet surface from origin and check it is not inside an object
-    /*wrap_object.get_closest_surface(tmp,id_surf_obj);
+// get closet surface from origin and check it is not inside an object
+/*wrap_object.get_closest_surface(tmp,id_surf_obj);
     if(wrap_object.is_inside_surface(tmp,id_surf_obj.index_obj,id_surf_obj.index_fea)){
         min_distance_surface = -1;
      }else{
@@ -228,13 +199,13 @@ void Contact_distance_model::get_distances_model(const wobj::ID_object& id_surfa
     min_distance_surface    = std::numeric_limits<float>::max();
     min_distance_edge       = std::numeric_limits<float>::max();*/
 
-   /* for(std::size_t i = 0; i < num_model_points;i++)
+/* for(std::size_t i = 0; i < num_model_points;i++)
     {*/
 
-        //current_distance_surface = wrap_object.distance_to_surface(model_points.row(i).st(),id_surface);
-        //current_distance_edge    = wrap_object.distance_to_edge(model_points.row(i).st(),id_edge);
+//current_distance_surface = wrap_object.distance_to_surface(model_points.row(i).st(),id_surface);
+//current_distance_edge    = wrap_object.distance_to_edge(model_points.row(i).st(),id_edge);
 
-        /*if(wrap_object.is_inside_surface(model_points.row(i).st(),id_surface.index_obj,id_surface.index_fea)){
+/*if(wrap_object.is_inside_surface(model_points.row(i).st(),id_surface.index_obj,id_surface.index_fea)){
 
             if(current_distance_surface > 0.004){
                 min_distance_surface = -1;
@@ -261,7 +232,7 @@ void Contact_distance_model::get_distances_model(const wobj::ID_object& id_surfa
         }
     }*/
 
-   /* if(min_distance_surface != -1){
+/* if(min_distance_surface != -1){
         // Get closest projected surface and edge points
 
         // get closest surface_point
@@ -285,7 +256,7 @@ void Contact_distance_model::get_distances_model(const wobj::ID_object& id_surfa
 //}
 
 void Contact_distance_model::initialise_vision(ros::NodeHandle& node){
-    Plug_distance_model::initialise_vision(node);
+    Peg_distance_model::initialise_vision(node);
     ptr_vis_vectors = std::shared_ptr<opti_rviz::Vis_vectors>( new opti_rviz::Vis_vectors(node,"contact_model"));
     ptr_vis_vectors->scale = 0.002;
     ptr_vis_vectors->set_color(colors);
@@ -301,7 +272,7 @@ void Contact_distance_model::initialise_vision(ros::NodeHandle& node){
 
 void Contact_distance_model::visualise(){
     if(b_visualise){
-        Plug_distance_model::visualise();
+        Peg_distance_model::visualise();
         if(ptr_vis_vectors != NULL){
             ptr_vis_vectors->update(dir_vectors);
             ptr_vis_vectors->publish();
@@ -340,7 +311,7 @@ Four_contact_distance_model::Four_contact_distance_model(wobj::WrapObject &wrap_
 }
 
 void Four_contact_distance_model::update(arma::colvec &Y, const arma::colvec3 &pos, const arma::mat33 &Rot){
-    Plug_distance_model::update_model(pos,Rot);
+    Peg_distance_model::update_model(pos,Rot);
     Contact_distance_model::get_distances();
 
     Y.resize(5);
@@ -377,7 +348,7 @@ void Four_contact_distance_model::update(arma::colvec &Y, const arma::colvec3 &p
 //void Four_contact_distance_model::smooth_update(arma::colvec &Y){
 
 
-       /*Y(0) = gaussian(min_distance_surface,0,dist_var);
+/*Y(0) = gaussian(min_distance_surface,0,dist_var);
 
        if(norm_direction > 0.01){
            for(std::size_t i = 0; i < directions.size();i++){

@@ -1,5 +1,5 @@
-#ifndef PLUG_SENSOR_LISTENER_H_
-#define PLUG_SENSOR_LISTENER_H_
+#ifndef PEG_SENSOR_LISTENER_H_
+#define PEG_SENSOR_LISTENER_H_
 
 #include <ros/ros.h>
 #include <std_msgs/Float32MultiArray.h>
@@ -7,11 +7,11 @@
 
 namespace psm{
 
-class Plug_sensor_listener{
+class Peg_sensor_listener{
 
 public:
 
-    Plug_sensor_listener(ros::NodeHandle& node,const std::string& topic_name,std::size_t data_size);
+    Peg_sensor_listener(ros::NodeHandle& node,const std::string& topic_name,std::size_t data_size);
 
 private:
 

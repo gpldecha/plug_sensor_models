@@ -1,7 +1,7 @@
-#ifndef DISTANCE_FEATURES_H_
-#define DISTANCE_FEATURES_H_
+#ifndef PEG_SENSOR_DISTANCE_FEATURES_H_
+#define PEG_SENSOR_DISTANCE_FEATURES_H_
 
-#include <wrapobject/wrapobject.h>
+#include "wrapobject.h"
 
 namespace psm{
 
