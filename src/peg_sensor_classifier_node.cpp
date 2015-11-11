@@ -32,9 +32,10 @@ int main(int argc,char** argv){
     // -------------- Get node input paramters --------------
 
     std::map<std::string,std::string> input;
-    input["-listen_topic"]      = "";
-    input["-publish_topic"]     = "";
+    input["-y_topic"]           = "";
+    input["-ft_topic"]          = "";
     input["-fixed_frame"]       = "/world_frame";
+    input["-path_sensor_model"] = "";
     input["-peg_link_name"]     = "";
     input["-rate"]              = "100";
     input["-print"]             = "false";
@@ -57,25 +58,24 @@ int main(int argc,char** argv){
     ros::init(argc, argv, "peg_sensor_classifier");
     ros::NodeHandle nh;
 
-    Peg_world_wrapper peg_world_wrapper(nh,path_sensor_model,fixed_frame);
+   Peg_world_wrapper peg_world_wrapper(nh,"peg_sensor_classifier",path_sensor_model,fixed_frame);
     wobj::WrapObject& wrapped_objects = peg_world_wrapper.get_wrapped_objects();
 
-    psm::Sensor_manager sensor_manager(wrapped_objects);
-    psm::Peg_sensor_clasifier(nh,
-                              fixed_frame,
-                              peg_link_name,
-                              sensor_manager,
-                              sensor_listener_topic,
-                              sensor_publish_topic);
+   psm::Sensor_manager sensor_manager(nh,wrapped_objects,peg_world_wrapper.socket_one);
+                        sensor_manager.t_sensor = psm::SIMPLE_CONTACT_DIST;
+
+   psm::Peg_sensor_clasifier peg_sensor_classifier(nh,
+                                                    fixed_frame,
+                                                    peg_link_name,
+                                                    sensor_manager,
+                                                    sensor_listener_topic,
+                                                    sensor_publish_topic);
     ros::Rate rate(rate_hz);
 
     while(nh.ok()){
 
-
         peg_world_wrapper.update();
-
-
-
+        peg_sensor_classifier.update();
 
         ros::spinOnce();
         rate.sleep();

@@ -63,6 +63,16 @@
   <build_depend>    objects      </build_depend>
   <run_depend>      objects      </run_depend>
 
+  <build_depend>    message_runtime       </build_depend>
+  <run_depend>      message_runtime       </run_depend>
+
+  <build_depend>    geometry_msgs       </build_depend>
+  <run_depend>      geometry_msgs       </run_depend>
+
+  <build_depend>    optitrack_rviz       </build_depend>
+  <run_depend>      optitrack_rviz       </run_depend>
+
+
 
 
   <!-- The export tag contains other, unspecified, tags -->

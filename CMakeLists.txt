@@ -5,7 +5,7 @@ project(peg_sensor)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp optitrack_rviz netft_rdt_driver std_msgs world_wrapper wrap_object objects statistics_ml)
+  roscpp optitrack_rviz netft_rdt_driver std_msgs geometry_msgs message_runtime world_wrapper wrap_object objects statistics_ml )
 
 find_package(Armadillo)
 
@@ -14,21 +14,21 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 
 
-#add_service_files(
-#  FILES
-#  String_cmd.srv
-#)
+add_service_files(
+  FILES
+  String_cmd.srv
+)
 
-#generate_messages(
-#  DEPENDENCIES
-#  std_msgs
-#)
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS roscpp world_wrapper wrap_object statistics_ml objects
+  CATKIN_DEPENDS roscpp world_wrapper wrap_object statistics_ml objects message_runtime geometry_msgs
   DEPENDS system_lib
 )
 
@@ -47,11 +47,13 @@ set(HEADER_FILES ${INCLUDE_DIR}/peg_sensor/peg_sensor_model/distance_features.h
 
                  ${INCLUDE_DIR}/peg_sensor/classifier/force_iid_model.h
                  ${INCLUDE_DIR}/peg_sensor/classifier/gmm_model.h
-                 ${INCLUDE_DIR}/peg_sensor/classifier/peg_classifier_publisher.h
+             #    ${INCLUDE_DIR}/peg_sensor/classifier/peg_classifier_publisher.h
                  ${INCLUDE_DIR}/peg_sensor/classifier/base_peg_classifier.h
                  ${INCLUDE_DIR}/peg_sensor/classifier/peg_classifier.h
 
                  ${INCLUDE_DIR}/peg_sensor/peg_world_wrapper/peg_world_wrapper.h
+
+                 ${INCLUDE_DIR}/peg_sensor/listener.h
 
 
 
@@ -67,7 +69,7 @@ set(SRC_FILES    ${SRC_DIR}/peg_sensor_model/distance_features.cpp
 
                  ${SRC_DIR}/classifier/force_iid_model.cpp
                  ${SRC_DIR}/classifier/gmm_model.cpp
-                 ${SRC_DIR}/classifier/peg_classifier_publisher.cpp
+         #        ${SRC_DIR}/classifier/peg_classifier_publisher.cpp
                  ${SRC_DIR}/classifier/peg_classifier.cpp
 
                  ${SRC_DIR}/peg_world_wrapper/peg_world_wrapper.cpp

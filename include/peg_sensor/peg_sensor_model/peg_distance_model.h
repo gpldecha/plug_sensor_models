@@ -21,6 +21,8 @@ public:
 
     virtual void update(arma::colvec& Y,const arma::colvec3& pos,const arma::mat33& Rot) = 0;
 
+    virtual void update(arma::mat& Y,const arma::mat& points,const arma::mat33& Rot) = 0;
+
     void print(const arma::colvec& Y) const;
 
     virtual void initialise_vision(ros::NodeHandle& node);
@@ -43,6 +45,8 @@ protected:
 
 };
 
+/*
+
 class Plug_contact_model{
 
 public:
@@ -62,6 +66,7 @@ private:
     arma::fcolvec3      correction;
 
 };
+*/
 
 }
 

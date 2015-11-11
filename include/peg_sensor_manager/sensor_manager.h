@@ -15,6 +15,7 @@
 #include "peg_sensor/peg_sensor_model/distance_model.h"
 #include "peg_sensor/classifier/force_iid_model.h"
 #include <std_msgs/Float32MultiArray.h>
+#include <peg_sensor/String_cmd.h>
 
 
 #include <armadillo>
@@ -26,49 +27,80 @@ namespace psm{
 
 typedef enum {NONE,
               SIMPLE_CONTACT_DIST,
-              FOUR_CONTACT_DIST,
               THREE_PIN_DIST,
               FORCE_IID
              } type_sensor;
+
+
 
 class Sensor_manager{
 
 public:
 
-    typedef std::shared_ptr<psm::Peg_distance_model>        Sptr_dist;
     typedef std::shared_ptr<psm::Contact_distance_model>    Sptr_cdist;
-    typedef std::shared_ptr<psm::Three_pin_distance_model>  Sptr_three_dist;
+    //typedef std::shared_ptr<psm::Three_pin_distance_model>  Sptr_three_dist;
     typedef std::shared_ptr<psm::Force_iid_model>           Sptr_fii;
 
 public:
 
-    Sensor_manager(wobj::WrapObject& wrapped_objects);
+    Sensor_manager(ros::NodeHandle& nh,wobj::WrapObject& wrapped_objects,obj::Socket_one& socket_one);
 
-    void initialise(type_sensor t_sensor);
 
-    void update(arma::colvec& Y,
+    // called for one point at the time
+   /* void update(arma::colvec& Y,
                 const arma::colvec3& pos,
                 const arma::mat33& Rot,
                 const arma::fcolvec3& force,
-                const arma::fcolvec3& torque);
+                const arma::fcolvec3& torque);*/
 
 
-    void init_visualise(ros::NodeHandle& node);
+    /**
+     * @brief update_peg        : computes actual sensation Y from the peg end-effector.
+     *                            This function would tipically be used in the peg_sensor node
+     *                            which publishes the sensations Y felt by the peg. In our case
+     *                            Y is a probability distribution over a set of discrete features.
+     */
+    void update_peg(arma::colvec& Y,const arma::colvec3& pos, const arma::mat33& Ro);
 
-    void visualise();
+    /**
+     * @brief update_particles  : computes expected sensation hY for a set of hypothetical
+     *                            positions of the end-effector. This function would tipically
+     *                            be used on the particle filters side to compute hypothetical
+     *                            sensations, hY, which are then used to compute the likelihood
+     *                            of each particle.
+     */
+    void update_particles(arma::mat& Y,const arma::mat& points, const arma::mat33& Rot);
 
-    void print(arma::colvec& Y);
+
+  //  void init_visualise(ros::NodeHandle& node);
+
+    // void visualise();
+
+//    void print(arma::colvec& Y);
+
+private:
+
+    void initialise();
+
+    bool sensor_manager_callback(peg_sensor::String_cmd::Request& req, peg_sensor::String_cmd::Response& res);
+
 
 public:
 
-    Sptr_dist               sptr_dist;
-    Sptr_fii                ptr_sensor_force_idd;
     type_sensor             t_sensor;
-    wobj::WrapObject&       wrapped_objects;
 
 
 private:
 
+    Sptr_cdist              sptr_cdist;
+    //Sptr_three_dist         sptr_three_dist;
+    Sptr_fii                ptr_sensor_force_idd;
+
+    wobj::WrapObject&       wrapped_objects;
+    obj::Socket_one&        socket_one;
+
+
+    ros::ServiceServer      service_server;
 
 
 

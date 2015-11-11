@@ -9,7 +9,7 @@ GMM_model::GMM_model(const std::string &name):
 
 
 GMM_feature_model::GMM_feature_model(const std::string& name, const std::string &path_to_parameters):
-    GMM_model(name),gmm(path_to_parameters,"bla")
+    GMM_model(name),gmm(path_to_parameters)
 {
    x.resize(6);
 }

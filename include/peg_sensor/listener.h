@@ -11,7 +11,8 @@ class Peg_sensor_listener{
 
 public:
 
-    Peg_sensor_listener(ros::NodeHandle& node,const std::string& topic_name,std::size_t data_size);
+    Peg_sensor_listener(ros::NodeHandle& node, const std::string& topic_name);
+
 
 private:
 
@@ -19,12 +20,12 @@ private:
 
 public:
 
-    arma::fcolvec   data;
+    arma::colvec   Y;
 
 private:
 
     ros::Subscriber subscriber;
-    std::size_t     data_size;
+    std::size_t size;
 
 
 

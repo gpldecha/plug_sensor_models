@@ -13,6 +13,15 @@ wrapped_world(wrapped_world)
 
 
 void Distance_features::compute_surface_edge_vector(const arma::fcolvec3 &P){
+
+  /* wobj::WBox* wbox_one = wrapped_world.wboxes[0];
+
+   wbox_one->distance_to_surfaces(P);
+   wbox_one->dist_surface;
+   point_surface = wbox_one->get_surface_projection();*/
+
+  //  wrapped_world.distance_to_surface(P,0);
+
     wrapped_world.distance_to_features(P);
     point_edge    = wrapped_world.get_closest_point_edge();
     point_surface = wrapped_world.get_closest_point_surface();

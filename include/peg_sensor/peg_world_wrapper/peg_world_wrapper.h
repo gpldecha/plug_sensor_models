@@ -32,15 +32,16 @@ class Peg_world_wrapper{
 public:
 
     Peg_world_wrapper(ros::NodeHandle& nh,
-                      const std::string &path_sensor_model,
+                      const std::string& node_name,
+                      const std::string& path_sensor_model,
                       const std::string& fixed_frame,
                       const std::string table_link_name      = "link_wall",
                       const std::string socket_link_name     = "link_socket",
                       const std::string socket_link_box_name = "link_wall");
 
-    void set_table_socket_origin(const arma::fcolvec3& origin,const arma::fcolvec3& rpy);
+  //  void set_table_socket_origin(const arma::fcolvec3& origin,const arma::fcolvec3& rpy);
 
-    void transform_table_socket(const arma::fcolvec3& origin);
+ //   void transform_table_socket(const arma::fcolvec3& origin);
 
     ww::World_wrapper& get_world_wrapper();
 
@@ -64,6 +65,9 @@ private:
 
     void initialise_objects();
 
+public:
+
+    obj::Socket_one    socket_one;
 
 private:
 
@@ -75,7 +79,8 @@ private:
          std::string        socket_link_box_name;
 
 
-         obj::Socket_one    socket_one;
+         wobj::WBox         wbox;
+         wobj::WBox         wbox_socket;
 
          std::shared_ptr<ww::Publisher>             world_publisher;
          std::shared_ptr<obj::Vis_socket>           vis_socket;

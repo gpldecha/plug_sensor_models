@@ -43,6 +43,8 @@ void Peg_sensor_model::get_distance_features(){
     min_distance_edge       = std::numeric_limits<float>::max();
     min_distance_surface    = std::numeric_limits<float>::max();
 
+  //  std::cout<< "Peg_sensor_model::get_distance_features()" << std::endl;
+
 
     for(std::size_t i = 0; i <  model.size();i++)
     {
@@ -65,7 +67,6 @@ void Peg_sensor_model::get_distance_features(){
             min_distance_surface = current_distance_surface;
         }
 
-
         if(current_distance_edge < min_distance_edge){
 
             contact_info[EDGE].index                 = i;
@@ -80,8 +81,27 @@ void Peg_sensor_model::get_distance_features(){
   //  contact_info[SURFACE].print();
   //  contact_info[EDGE].print();
 
+/*
+
+    tmp_vec3f(0) = model[0][0];
+    tmp_vec3f(1) = model[0][1];
+    tmp_vec3f(2) = model[0][2];
+
+    wrapped_world.distance_to_features(tmp_vec3f);
+
+    current_distance_surface  = wrapped_world.get_distance_to_surface();
+    current_distance_edge     = wrapped_world.get_distance_to_edge();
 
 
+    contact_info[SURFACE].index            = 0;
+    contact_info[SURFACE].closest_point    = wrapped_world.get_closest_point_surface();
+    contact_info[SURFACE].distance         = current_distance_surface;
+
+    contact_info[EDGE].index                 = 0;
+    contact_info[EDGE].closest_point         = wrapped_world.get_closest_point_edge();
+    contact_info[EDGE].distance              = current_distance_edge;
+
+*/
 
     // SURFACE
     arrows[SURFACE].origin      = model[contact_info[SURFACE].index];
